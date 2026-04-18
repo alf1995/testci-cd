@@ -1,0 +1,28 @@
+name: PHP CI/CD Example
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Configurar PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, xml
+        tools: composer:v2
+
+    - name: Instalar dependencias
+      run: composer install --prefer-dist --no-progress
+
+    - name: Ejecutar Pruebas Unitarias
+      run: vendor/bin/phpunit tests
